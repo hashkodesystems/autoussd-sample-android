@@ -42,41 +42,68 @@ class MainActivity : ComponentActivity() {
     autoussd = AutoUssd(
       this, "Buvll5o7D3bw8ZDLR0a2caAO3XB2", listOf("OxrRDRD65l4mMf7PCw5xC"),
       object : AutoUssd.Callback() {
+        /**
+         * Called when the SDK has loaded the sessions into memory.
+         * You should wait till this method is called before proceeding
+         * @param instance - The instance of AutoUssd
+         */
         override fun onReady(instance: AutoUssd) {
-          // You should wait for this callback
-          // before calling the execute method
           Log.d(TAG, "AutoUssd Ready!!!")
         }
 
+        /**
+         * Called when the SDK encounters an error loading the sessions.
+         * @param description - A friendly description of what went wrong
+         */
         override fun onLoadSessionsError(description: String) {
           Log.e(TAG, "Unable to load sessions: $description")
         }
 
+        /**
+         * Called when the SDK cannot find a matching SIM for the session being executed.
+         * @param description - A friendly description of what went wrong
+         */
         override fun onUnsupportedNetworkError(description: String) {
           Log.e(TAG, "Unable to load sessions: $description")
         }
 
+        /**
+         * Called when the SDK encounters a USSD dialog which doesn't full match
+         * any of the session menus at that level.
+         * @param mismatchedContent - The content of the USSD dialog
+         * @param candidateKeywords - A list of the keywords of menus at that level
+         */
         override fun onSessionMenuMismatch(mismatchedContent: String, candidateKeywords: List<String>) {
           Log.e(TAG, "Session menu mismatch")
           Log.e(TAG, "USSD content: $mismatchedContent")
           Log.e(TAG, "Compared to: ${candidateKeywords.joinToString(separator = "|||||")}")
         }
 
+        /**
+         * Called when the SDK successfully executes a session
+         * @param lastMenuContent - The content of the last USSD dialog
+         */
         override fun onSessionCompleted(lastMenuContent: String) {
           Log.d(TAG, "Session completed with last menu content: $lastMenuContent")
         }
 
+        /** Called when the SDK times out waiting for a USSD dialog */
         override fun onSessionTimeout() {
           Log.e(TAG, "Session timed out")
         }
 
-        override fun onSessionError(description: String) {
-          Log.e(TAG, "Session error: $description")
-        }
-
+        /** Called when the user cancels the session before it completes */
         override fun onSessionInterrupted() {
           super.onSessionInterrupted()
           Log.e(TAG, "Session interrupted by user")
+        }
+
+        /**
+         * Called when the SDK encounters an unexpected error
+         * @param description - A friendly description of what went wrong
+         */
+        override fun onSessionError(description: String) {
+          Log.e(TAG, "Session error: $description")
         }
       }
     )
