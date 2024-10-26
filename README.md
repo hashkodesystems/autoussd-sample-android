@@ -1,4 +1,4 @@
-![AutoUssd Logo](./app/src/main/res/mipmap-hdpi/logo.png)
+<img src="./app/src/main/res/mipmap-hdpi/logo.png" width="50%" alt="AutoUssd Logo" />
 
 # AutoUssd Android Sample App
 
